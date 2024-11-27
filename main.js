@@ -1,7 +1,5 @@
-function getComputerChoice() {
-    const choice = Math.floor(Math.random() * 3) ;
-
-    switch (choice) {
+function numberToGameValue(number) {
+    switch (number) {
         case 0:
             return "rock";
         case 1:
@@ -13,4 +11,14 @@ function getComputerChoice() {
     }
 }
 
-console.log(getComputerChoice());
+function getComputerChoice() {
+    const choice = Math.floor(Math.random() * 3) ;
+    return numberToGameValue(choice);
+}
+
+function getHumanChoice() {
+    const choice = Number.parseInt(prompt("Enter choice:\n\t0 = rock\n\t1 = paper\n\t2 = scissors"));
+    return numberToGameValue(choice);
+}
+
+console.log(getHumanChoice());
