@@ -47,7 +47,7 @@ function getOutcome(humanChoice, computerChoice) {
             break;
         case "scissors":
             humanWins = (computerChoice === "paper");
-            break;
+            break;1
     }
 
     return humanWins ? HUMAN_WINS : COMPUTER_WINS;
@@ -66,20 +66,35 @@ function getOutcomeMessage(outcome, humanChoice, computerChoice) {
     }
 }
 
-function playRound(humanChoice, computerChoice) {
-    const humanChoiceLower = humanChoice.toLowerCase();
-    const computerChoiceLower = computerChoice.toLowerCase();
+function playGame() {
+    let humanScore = 0;
+    let computerScore = 0;
 
-    const outcome = getOutcome(humanChoice, computerChoice);
-    const message = getOutcomeMessage(outcome, humanChoiceLower, computerChoiceLower);
+    function playRound(humanChoice, computerChoice) {
+        const humanChoiceLower = humanChoice.toLowerCase();
+        const computerChoiceLower = computerChoice.toLowerCase();
 
-    console.log(message);
+        const outcome = getOutcome(humanChoice, computerChoice);
+        const message = getOutcomeMessage(outcome, humanChoiceLower, computerChoiceLower);
+
+        if (outcome === HUMAN_WINS) {
+            humanScore++;
+        } else if (outcome === COMPUTER_WINS) {
+            computerScore++;
+        }
+
+        console.log(message);
+    }
+
+    for (let turn = 0; turn < 5; turn++) {
+
+        let humanSelection = getHumanChoice();
+        let computerSelection = getComputerChoice();
+
+        playRound(humanSelection, computerSelection);
+    }
+
+    console.log("Score: you: " + humanScore + ", computer " + computerScore);
 }
 
-let humanScore = 0;
-let computerScore = 0;
-
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
-
-playRound(humanSelection, computerSelection);
+playGame();
