@@ -2,26 +2,100 @@ const HUMAN_WINS = 0;
 const COMPUTER_WINS = 1;
 const TIE = 2;
 
-function numberToGameValue(number) {
-    switch (number) {
-        case 0:
-            return "rock";
-        case 1:
-            return "paper";
-        case 2:
-            return "scissors";
+const startPlayingButton = document.querySelector('#start-playing-button');
+const playerActionButtons = document.querySelector('#player-action-buttons');
+const roundWinnerDiv = document.querySelector('#round-winner');
+const gameWinnerDiv = document.querySelector('#game-winner');
+const playerScore = document.querySelector('#player-score');
+const computerScore = document.querySelector('#computer-score');
+
+let roundsWonByPlayer = 0;
+let roundsWonByComputer = 0;
+
+startPlayingButton.addEventListener('click', () => {
+    roundsWonByPlayer = 0;
+    roundsWonByComputer = 0;
+
+    playerScore.textContent = roundsWonByPlayer;
+    computerScore.textContent = roundsWonByComputer;
+
+    startPlayingButton.classList.toggle('hidden', true);
+    playerActionButtons.classList.toggle('hidden', false);
+    roundWinnerDiv.classList.toggle('hidden', true);
+    gameWinnerDiv.classList.toggle('hidden', true);
+});
+
+playerActionButtons.addEventListener('click', e => {
+    switch (e.target.id) {
+        case 'rock':
+            // fallthrough
+        case 'paper':
+            // fallthrough
+        case 'scissors':
+            playRound(e.target.id);
+            break;
         default:
-            return "Unknown value encountered";
+            console.error(`Invalid player choice: ${e.target.id}`);
+            break;
     }
+});
+
+function playRound(playerChoice) {
+    roundWinnerDiv.classList.toggle('hidden', false);
+
+    let computerChoice = getComputerChoice();
+    let outcome = getOutcome(playerChoice, computerChoice);
+
+    const winsMessage = roundWinnerDiv.querySelector('#wins-message');
+    const computersChoiceMessage = roundWinnerDiv.querySelector('#computers-choice');
+
+    if (outcome === HUMAN_WINS) {
+        roundsWonByPlayer++;
+        winsMessage.textContent = 'You win this round.';
+    } else if (outcome === COMPUTER_WINS) {
+        roundsWonByComputer++;
+        winsMessage.textContent = 'Computer wins this round.';
+    }
+    else {
+        winsMessage.textContent = 'Tie-break.';
+    }
+
+    computersChoiceMessage.textContent = `${capitalize(computerChoice)}`
+
+    playerScore.textContent = roundsWonByPlayer;
+    computerScore.textContent = roundsWonByComputer;
+
+    if (roundsWonByPlayer >= 5 || roundsWonByComputer >= 5 ) {
+        startPlayingButton.classList.toggle('hidden', false);
+        playerActionButtons.classList.toggle('hidden', true);
+        roundWinnerDiv.classList.toggle('hidden', true);
+        gameWinnerDiv.classList.toggle('hidden', false);
+
+        const winner = document.querySelector('#winner');
+
+        if (roundsWonByPlayer >= 5) {
+            winner.textContent = 'You'
+        }
+        else {
+            winner.textContent = 'Computer'
+        }
+    }
+}
+
+
+function numberToGameValue(choice) {
+    const choices = ['rock', 'paper', 'scissors'];
+
+    if (choice < 0 || choice >= choices.length) {
+        console.error(`Value out of range [0-3]: ${choice}`);
+        return '';
+    }
+
+    return choices[choice];
 }
 
 function getComputerChoice() {
     const choice = Math.floor(Math.random() * 3) ;
-    return numberToGameValue(choice);
-}
-
-function getHumanChoice() {
-    const choice = Number.parseInt(prompt("Enter choice:\n\t0 = rock\n\t1 = paper\n\t2 = scissors"));
     return numberToGameValue(choice);
 }
 
@@ -47,54 +121,8 @@ function getOutcome(humanChoice, computerChoice) {
             break;
         case "scissors":
             humanWins = (computerChoice === "paper");
-            break;1
+            break;
     }
 
     return humanWins ? HUMAN_WINS : COMPUTER_WINS;
 }
-
-function getOutcomeMessage(outcome, humanChoice, computerChoice) {
-    switch (outcome) {
-        case TIE:
-            return "No winner! Both chose " + capitalize(humanChoice);
-        case COMPUTER_WINS:
-            return "You lose! " + capitalize(computerChoice) + " defeats " + capitalize(humanChoice);
-        case HUMAN_WINS:
-            return "You win! " + capitalize(humanChoice) + " defeats " + capitalize(computerChoice);
-        default:
-            return "Error! Unknown value for outcome parameter: " + outcome;
-    }
-}
-
-function playGame() {
-    let humanScore = 0;
-    let computerScore = 0;
-
-    function playRound(humanChoice, computerChoice) {
-        const humanChoiceLower = humanChoice.toLowerCase();
-        const computerChoiceLower = computerChoice.toLowerCase();
-
-        const outcome = getOutcome(humanChoice, computerChoice);
-        const message = getOutcomeMessage(outcome, humanChoiceLower, computerChoiceLower);
-
-        if (outcome === HUMAN_WINS) {
-            humanScore++;
-        } else if (outcome === COMPUTER_WINS) {
-            computerScore++;
-        }
-
-        console.log(message);
-    }
-
-    for (let turn = 0; turn < 5; turn++) {
-
-        let humanSelection = getHumanChoice();
-        let computerSelection = getComputerChoice();
-
-        playRound(humanSelection, computerSelection);
-    }
-
-    console.log("Score: you: " + humanScore + ", computer " + computerScore);
-}
-
-playGame();

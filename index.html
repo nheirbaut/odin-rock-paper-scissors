@@ -1,11 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="main.js"></script>
-    <title>Rock-paper-scissors</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Rock-Paper-Scissors</title>
 </head>
+
 <body>
+
+    <header>
+        <h1>Rock-Paper-Scissors</h1>
+    </header>
+
+    <main>
+        <p id="description">Play the great game of Rock-Paper-Scissors in the browser. The first player to win 5 times
+            is the winner.
+        </p>
+
+        <div class="hidden" id="score-container">
+            <div class="score-card" id="player-score-card">
+                <p>You</p>
+                <p class="score" id="player-score">0</p>
+            </div>
+            <div class="score-card" id="computer-score-card">
+                <p>Computer</p>
+                <p class="score" id="computer-score">0</p>
+            </div>
+        </div>
+
+        <div id="choice-container">
+            <div id="start-playing-button">
+                <button id="play">Play!</button>
+            </div>
+            <div class="hidden" id="player-action-buttons">
+                <button id="rock">Rock</button>
+                <button id="paper">Paper</button>
+                <button id="scissors">Scissors</button>
+            </div>
+        </div>
+
+        <div id="outcome-container">
+            <div class="hidden" id="round-winner">
+                <p id="wins-message"></p>
+                <p>Computer chose '<span id="computers-choice"></span>'</p>
+            </div>
+            <div class="hidden" id="game-winner">
+                <p>Game winner</p>
+                <p id="winner">You</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        Rock-Paper-Scissors for <a
+            href="https://www.theodinproject.com/lessons/foundations-revisiting-rock-paper-scissors">The Odin
+            Project</a>
+    </footer>
+
+    <script src="main.js"></script>
+
 </body>
+
 </html>
